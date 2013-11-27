@@ -21,10 +21,15 @@ picture that the original makes evident.
 
 I assume you have leiningen working.
 
-### clone the repo
-### cd to where you put it
-### lein repl
-### (use 'basic-income.core)
+```sh
+clone the repo
+cd to where you put it
+lein repl
+```
+
+```clj
+(use 'basic-income.core)
+```
 
 ## License
 
