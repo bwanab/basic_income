@@ -11,10 +11,17 @@
   (let [num-of-jk-rowlings (sample-binomial 1 :size non-workers :prob 1e-7)]
     (* num-of-jk-rowlings 1e9)))
 
+(defn uniform
+  "create a uniform distribution given a minimum value and scale such that the min is min and max is min + scale.
+   The only purpose is for easier comparison of numbers to the scipy uniform function which has these parameters.
+  "
+  [min scale]
+  (first (sample-uniform 1 :min min :max (+ min scale))))
+
 (defn basic-income-cost-benefit []
   (let [direct-costs (* num-adults basic-income)
         administrative-cost-per-person (sample-normal 1 :mean 250 :sd 75)
-        non-worker-multiplier (first (sample-uniform 1 :min -0.05 :max 0.15))
+        non-worker-multiplier (uniform -0.10 0.15)
         non-workers (* (- num-adults labor-force disabled-adults)
                        (+ 1 non-worker-multiplier))
         marginal-worker-hourly-productivity (sample-normal 1 :mean 10 :sd 1)
@@ -27,9 +34,9 @@
 
 (defn basic-job-cost-benefit []
   (let [administrative-cost-per-disabled-person (sample-normal 1 :mean 500 :sd 150)
-        administrative-cost-per-worker (sample-normal 1 :mean 5000 :sd 1500)
-        non-worker-multiplier (first (sample-uniform 1 :min -0.20 :max 0.25))
-        basic-job-hourly-productivity (first (sample-uniform 1 :min 0 :max 7.25))
+        administrative-cost-per-worker (sample-normal 1 :mean 20000 :sd 1500)
+        non-worker-multiplier (uniform -0.20 0.25)
+        basic-job-hourly-productivity (uniform -10 17.25)
         disabled-cost (* disabled-adults (+ basic-income administrative-cost-per-disabled-person))
         num-basic-workers (* (- num-adults disabled-adults labor-force)
                              (+ 1 non-worker-multiplier))
@@ -38,7 +45,7 @@
                                                         (* 40 50 basic-job-hourly-productivity))))]
     (+ disabled-cost basic-worker-cost-benefit)))
 
-"Monty Carlo time!"
+"Monte Carlo time!"
 (def N (* 1024 12))
 
 (def bi (map (fn [_] (basic-income-cost-benefit)) (range N)))
