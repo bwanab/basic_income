@@ -46,7 +46,7 @@
     (+ disabled-cost basic-worker-cost-benefit)))
 
 "Monte Carlo time!"
-(def N (* 1024 12))
+(def N (* 1024 32))
 
 (def bi (map (fn [_] (basic-income-cost-benefit)) (range N)))
 (def bj (map (fn [_] (basic-job-cost-benefit)) (range N)))
